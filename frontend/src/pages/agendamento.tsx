@@ -81,6 +81,19 @@ const AgendamentoPage = () => {
 
   return (
     <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/images/fundoescuro2.png')" }}>
+      <header className="header">
+    <div className="container">
+      <nav>
+        <ul className="header-nav">
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/cliente" className="nav-link">Cliente</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
       <div className="bg-black bg-opacity-50 min-h-screen flex flex-col items-center justify-center">
         <h1 className="text-4xl font-bold text-white mb-6">Tabela de Agendamentos</h1>
         <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md w-11/12 max-w-4xl overflow-auto">
@@ -120,6 +133,9 @@ const AgendamentoPage = () => {
           </table>
         </div>
       </div>
+      <footer className="footer">
+        <p>© 2024 JP Cortes Barbearia. Todos os direitos reservados.</p>
+      </footer>
     </div>
   );
 };

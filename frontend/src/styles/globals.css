@@ -7,7 +7,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html, body {
   font-family: 'Roboto', sans-serif;
   background-color: #f4f4f4;
   color: #333;
@@ -22,8 +22,205 @@ h1, h2, h3, h4, h5, h6 {
   color: #000;
 }
 
-p, span, li, a {
+main p, main span, main li, main a {
   font-family: 'Roboto', sans-serif;
   font-size: 25px;
   color: #000;
+}
+
+
+
+/* Personalização dos links de navegação */
+.nav-link {
+  font-size: 1rem; /* Tamanho da fonte */
+  text-transform: uppercase; /* Letras maiúsculas */
+  color: white;
+  text-decoration: none; /* Remove o sublinhado */
+  transition: color 0.3s ease, transform 0.3s ease; /* Transição suave */
+}
+
+.nav-link:hover {
+  color: #ffcc00; /* Cor ao passar o mouse */
+  transform: scale(1.1); /* Leve aumento ao passar o mouse */
+}
+
+.nav-link:focus,
+.nav-link:active {
+  color: #ff9900; /* Cor ao focar ou clicar no link */
+  outline: none; /* Remove o contorno padrão do navegador */
+}
+
+.header-nav {
+  display: flex; /* Usando flex para exibir os itens lado a lado */
+  justify-content: flex-end; /* Alinha os itens à direita */
+  list-style: none; /* Remove os marcadores */
+  padding: 0;
+  margin: 0;
+}
+
+.header-nav li {
+  margin-left: 1rem; /* Espaço entre os itens */
+}
+
+
+/* Estilo do container geral */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Estilo para o cabeçalho */
+.header {
+  color: #fff;
+  padding: 1rem 0;
+  text-align: right;  /* Alinha o conteúdo do cabeçalho à direita */
+}
+
+/* Estilo para o rodapé */
+.footer {
+  color: #fff !important; /* Sobrescreve o estilo global */
+  background-color: transparent; /* Remove qualquer fundo */
+  text-align: center; /* Centraliza o texto */
+  padding: 1rem 0;
+  width: 100%; /* Garante que ocupa toda a largura */
+  margin-top: auto; /* Mantém o rodapé no final da página */
+}
+
+
+
+
+/* Títulos e texto */
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/*.subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+}*/
+
+.subtitle {
+  font-size: 2.25rem; /* Título principal maior */
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+
+.text {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  color: #a0aec0; /* Cor mais suave */
+}
+
+/* Notícia Card */
+.card {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.card-link {
+  color: #3182ce;
+  text-decoration: underline;
+}
+
+.card-link:hover {
+  color: #2b6cb0;
+}
+
+/* Botões */
+.button-add {
+  background-color: #3182ce;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  transition: background-color 0.3s ease;
+}
+
+.button-add:hover {
+  background-color: #2b6cb0;
+}
+
+.button-cancel {
+  background-color: #e2e8f0;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  transition: background-color 0.3s ease;
+}
+
+.button-cancel:hover {
+  background-color: #cbd5e0;
+}
+/* Classe para o fundo com imagem */
+.telafundo-custom {
+  background-image: url('/images/wallpaper6.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* Garante que o fundo ocupe toda a altura da tela */
+  display: flex;
+  flex-direction: column;
+  /* Outras propriedades do fundo podem ser ajustadas conforme necessário */
+}
+
+main {
+  flex: 1;
+}
+
+/* Estilo das seções */
+section {
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+}
+
+section h3 {
+  font-size: 1.5rem; /* Subtítulo maior */
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #f0f0f0; /* Texto levemente mais claro */
+}
+
+/* Mapa */
+iframe {
+  border: 0;
+  width: 100%;
+  height: 400px;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

@@ -1,10 +1,25 @@
 "use client";
 import React from 'react';
-
+import Link from "next/link";
 const ClientePage = () => {
   return (
+  <div className="telafundo-custom"> {/* Aplica a classe de fundo global */}
+      {/* Cabeçalho */}
+      <header className="header">
+    <div className="container">
+      <nav>
+        <ul className="header-nav">
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/cliente" className="nav-link">Cliente</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
     <div className="relative min-h-screen">
-      {}
+      {}{/* Cabeçalho */}
       <div
         className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0"
         style={{
@@ -15,8 +30,6 @@ const ClientePage = () => {
 
       {}
       <div className="relative z-10 flex flex-col items-center min-h-screen p-4 text-white">
-
-
         <main className="mt-10 flex flex-col items-center w-full">
           <h2 className="text-4xl font-semibold text-white">Cliente</h2>
 
@@ -78,11 +91,11 @@ const ClientePage = () => {
           </div>
         </main>
 
-        <footer className="mt-auto py-4 text-center text-sm">
-          <p className="mb-2 text-white">© 2024 JP Cortes Barbearia. Todos os direitos reservados.</p>
-          <img src="/images/JPicon.png" alt="Ícone JP" className="h-12 mx-auto" />
-        </footer>
+        <footer className="footer">
+        <p>© 2024 JP Cortes Barbearia. Todos os direitos reservados.</p>
+      </footer>
       </div>
+    </div>
     </div>
   );
 };
