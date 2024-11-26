@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: 'http://localhost:3001/',
   headers: {
     "Content-Type": "application/json",
   },
@@ -30,9 +30,9 @@ interface UsuarioData {
 
 const login = async ({ email, senha }: { email: string; senha: string }) => {
   try {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-      email,
-      senha,
+    const response = await api.post('/auth/login', {
+      email: email,
+      senha: senha,
     });
     return response;
   } catch (error) {
