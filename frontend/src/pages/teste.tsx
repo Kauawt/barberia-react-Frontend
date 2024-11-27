@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { login, getUsuarios } from "@/services/APIService";
 
 const TestePage = () => {
-  const [email, setEmail] = useState("teste@exemplo.com"); 
-  const [senha, setSenha] = useState("teste1234@T"); 
+  const [email, setEmail] = useState(""); 
+  const [senha, setSenha] = useState(""); 
   const [usuarios, setUsuarios] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 

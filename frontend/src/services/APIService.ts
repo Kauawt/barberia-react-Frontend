@@ -94,10 +94,52 @@ export const resetPassword = async ({ email, senha }: { email: string; senha: st
   }
 };
 
+// Função para listar os serviços
+const getServicos = async () => {
+  try {
+    const response = await api.get('/servicos');
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao carregar serviços", error);
+    throw error;
+  }
+};
+
+// Função para criar um serviço
+const createServico = async (servicoData: {
+  nomeServico: string;
+  descricaoServico: string;
+  precoServico: number;
+  duracaoServico: number;
+  statusServico: boolean;
+}) => {
+  try {
+    const response = await api.post('/servicos', servicoData);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar serviço', error);
+    throw error;
+  }
+};
+
+// Função para excluir um serviço
+const deleteServico = async (id: number) => {
+  try {
+    const response = await api.delete(`/servicos/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao excluir serviço', error);
+    throw error;
+  }
+};
+
 export { 
   login, 
   createUsuario, 
   getUsuarios, 
   updateUsuario, 
-  deleteUsuario 
+  deleteUsuario,
+  getServicos, 
+  createServico, 
+  deleteServico
 };
