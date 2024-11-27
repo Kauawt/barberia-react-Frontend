@@ -3,31 +3,23 @@ import React from 'react';
 import Link from "next/link";
 const ClientePage = () => {
   return (
-  <div className="telafundo-custom"> {/* Aplica a classe de fundo global */}
-      {/* Cabeçalho */}
+  <div className="telafundo-custom"> {}
+      {}
       <header className="header">
     <div className="container">
       <nav>
         <ul className="header-nav">
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/cliente" className="nav-link">Cliente</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        <li><a href="/home" className="nav-link">Home</a></li>
+              <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+              <li><a href="/servicos" className="nav-link">Serviços</a></li>
+              <li><a href="/cliente" className="nav-link">Cliente</a></li>
+              <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+              <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
         </ul>
       </nav>
     </div>
   </header>
     <div className="relative min-h-screen">
-      {}{/* Cabeçalho */}
-      <div
-        className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0"
-        style={{
-          backgroundImage: "url('/images/wallpaper6.png')",
-          opacity: 0.9,
-        }}
-      />
-
       {}
       <div className="relative z-10 flex flex-col items-center min-h-screen p-4 text-white">
         <main className="mt-10 flex flex-col items-center w-full">
