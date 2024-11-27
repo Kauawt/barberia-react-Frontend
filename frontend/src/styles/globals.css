@@ -185,6 +185,7 @@ main p, main span, main li, main a {
 .telafundo-custom {
   background-image: url('/images/wallpaper6.png');
   background-size: cover;
+  opacity: 0.9;
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh; /* Garante que o fundo ocupe toda a altura da tela */

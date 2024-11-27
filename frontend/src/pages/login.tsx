@@ -36,13 +36,13 @@ const LoginPage = () => {
 
   return (
     <div className="relative min-h-screen">
-      {/* Imagem de fundo */}
+      {}
       <div
         className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0"
         style={{ backgroundImage: "url('/images/wallpaper_jp.png')" }}
       />
 
-      {/* Conteúdo */}
+      {}
       <div className="flex justify-center items-center min-h-screen z-10 relative">
         <div className="w-full max-w-sm p-12 bg-white bg-opacity-80 border border-gray-300 rounded-md shadow-lg backdrop-blur-sm">
           <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
@@ -103,7 +103,7 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Modal de redefinição de senha */}
+      {}
       {redefinirSenha && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
           <div className="bg-white p-6 rounded-md w-full max-w-sm shadow-lg">

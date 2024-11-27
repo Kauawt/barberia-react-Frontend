@@ -2,65 +2,90 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createUsuario } from "../services/APIService"; // Certifique-se de importar o método de API
-import { AxiosError } from 'axios';
-import axios from 'axios';
+import { createCliente } from "../services/APIService";
+
 
 const CadastroPage = () => {
-  const [step, setStep] = useState(1); // Controla a etapa do formulário
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [endereco, setEndereco] = useState("");
-  const [dataNascimento, setDataNascimento] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [erro, setErro] = useState(""); // Estado para exibir erros
+  const [step, setStep] = useState(1); 
+  const [nomeCliente, setNomeCliente] = useState("");
+  const [emailCliente, setEmailCliente] = useState("");
+  const [senhaCliente, setSenhaCliente] = useState("");
+  const [confirmarSenhaCliente, setConfirmarSenhaCliente] = useState("");
+  const [chaveSegurancaCliente, setChaveSegurancaCliente] = useState("");
+  const [telefoneCliente, setTelefoneCliente] = useState("");
+  const [enderecoCliente, setEnderecoCliente] = useState("");
+  const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
+  const [CPFCliente, setCpfCliente] = useState("");
+  const [erro, setErro] = useState("");
+  const [mensagem, setMensagem] = useState<string | null>(null);
+  const [mensagemTipo, setMensagemTipo] = useState<"sucesso" | "erro" | null>(null);
   const router = useRouter();
 
+  const exibirMensagem = (mensagem: string, tipo: "sucesso" | "erro") => {
+    setMensagem(mensagem);
+    setMensagemTipo(tipo);
+    setTimeout(() => {
+      setMensagem(null);
+      setMensagemTipo(null);
+    }, 4500);
+  };
+
+  const isCpfValido = (CPFCliente: string) => {
+    return CPFCliente.length === 11 && /^\d+$/.test(CPFCliente);
+  };
+
   const handleNextStep = () => {
-    if (senha !== confirmarSenha) {
+    if (senhaCliente !== confirmarSenhaCliente) {
       alert("As senhas não coincidem. Tente novamente.");
       return;
     }
-    setStep(2); // Avança para a próxima etapa
+    setStep(2);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const usuarioData = {
-      nome,
-      email,
-      senha,
+
+    // Validação de senha forte
+    const isSenhaForte = ( senhaCliente: string) => {
+      const regex =
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+      return regex.test(senhaCliente);
     };
-  
-    console.log('Dados enviados para a API:', usuarioData);  // Verifique se está mostrando os dados corretamente
-  
+
+    if (!isSenhaForte(senhaCliente)) {
+      exibirMensagem("A senha deve conter pelo menos 8 caracteres, incluindo 1 número, 1 letra minúscula e 1 símbolo.", "erro");
+      return;
+    }
     try {
-      // Usando a variável de ambiente para definir a URL da API
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/usuarios`, usuarioData);
-      if (response) {
-        alert('Cadastro realizado com sucesso!');
-        router.push('/login');
+      await createCliente({
+        nomeCliente,
+        emailCliente,
+        senhaCliente,
+        CPFCliente,
+        dataNascimentoCliente,
+        enderecoCliente,
+        telefoneCliente,
+      });
+      exibirMensagem("Cliente criado com sucesso!", "sucesso");
+      router.push('/login')
+    } catch (error: any) {
+      if (error.response) {
+        // Imprimir logs de erro da API
+        exibirMensagem(`Erro: ${error.response.data.message}`, "erro");
+      } else {
+        exibirMensagem("Erro ao criar Cliente. Tente novamente mais tarde.", "erro");
       }
-    } catch (error) {
-      console.error('Erro no cadastro:', error);  // Log completo do erro
-      alert('Erro ao realizar o cadastro. Tente novamente.');
     }
   };
-  
-  
 
   return (
     <div className="telafundo-custom min-h-screen">
-      {/* Conteúdo */}
+      {}
       <div className="relative z-10 flex flex-col items-center min-h-screen p-4 text-white">
         <main className="mt-10 flex flex-col items-center w-full">
           <h2 className="text-4xl font-semibold text-white">Cadastro</h2>
 
-          {/* Formulário */}
+          {}
           <div className="mt-6 max-w-lg bg-white bg-opacity-90 p-6 rounded-lg shadow-md text-black">
             {step === 1 && (
               <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }}>
@@ -72,8 +97,8 @@ const CadastroPage = () => {
                     type="text"
                     id="nome"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
+                    value={nomeCliente}
+                    onChange={(e) => setNomeCliente(e.target.value)}
                     placeholder="Digite seu nome"
                     required
                   />
@@ -86,8 +111,8 @@ const CadastroPage = () => {
                     type="email"
                     id="email"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={emailCliente}
+                    onChange={(e) => setEmailCliente(e.target.value)}
                     placeholder="Digite seu email"
                     required
                   />
@@ -100,8 +125,8 @@ const CadastroPage = () => {
                     type="password"
                     id="senha"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
+                    value={senhaCliente}
+                    onChange={(e) => setSenhaCliente(e.target.value)}
                     placeholder="Digite sua senha"
                     required
                   />
@@ -114,8 +139,8 @@ const CadastroPage = () => {
                     type="password"
                     id="confirmarSenha"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={confirmarSenha}
-                    onChange={(e) => setConfirmarSenha(e.target.value)}
+                    value={confirmarSenhaCliente}
+                    onChange={(e) => setConfirmarSenhaCliente(e.target.value)}
                     placeholder="Confirme sua senha"
                     required
                   />
@@ -139,8 +164,8 @@ const CadastroPage = () => {
                     type="tel"
                     id="telefone"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={telefone}
-                    onChange={(e) => setTelefone(e.target.value)}
+                    value={telefoneCliente}
+                    onChange={(e) => setTelefoneCliente(e.target.value)}
                     placeholder="Digite seu telefone"
                     required
                   />
@@ -153,8 +178,8 @@ const CadastroPage = () => {
                     type="text"
                     id="endereco"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={endereco}
-                    onChange={(e) => setEndereco(e.target.value)}
+                    value={enderecoCliente}
+                    onChange={(e) => setEnderecoCliente(e.target.value)}
                     placeholder="Digite seu endereço"
                     required
                   />
@@ -164,11 +189,11 @@ const CadastroPage = () => {
                     Data de Nascimento
                   </label>
                   <input
-                    type="date"
+                    type="text"
                     id="dataNascimento"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={dataNascimento}
-                    onChange={(e) => setDataNascimento(e.target.value)}
+                    value={dataNascimentoCliente}
+                    onChange={(e) => setDataNascimentoCliente(e.target.value)}
                     required
                   />
                 </div>
@@ -177,31 +202,52 @@ const CadastroPage = () => {
                     CPF
                   </label>
                   <input
-                    type="text"
                     id="cpf"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    value={cpf}
-                    onChange={(e) => setCpf(e.target.value)}
-                    placeholder="Digite seu CPF"
+                    value={CPFCliente}
+                    onChange={(e) => setCpfCliente(e.target.value)}
+                    className="w-full p-3 border rounded-md focus:outline-none"
                     required
+                    maxLength={11}
                   />
                 </div>
-                {erro && <p className="text-red-500 text-sm">{erro}</p>} {/* Exibe o erro */}
+                <div className="mb-4">
+                  <label htmlFor="chaveSeguranca" className="block text-sm">
+                    Chave de Segurança
+                  </label>
+                  <input
+                    type="text"
+                    id="chaveSeguranca"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    value={chaveSegurancaCliente}
+                    onChange={(e) => setChaveSegurancaCliente(e.target.value)}
+                    required
+                  />
+                  </div>
+                {erro && <p className="text-red-500 text-sm">{erro}</p>} {}
                 <button
                   type="submit"
                   className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-green-600 mb-4"
                 >
                   Finalizar Cadastro
                 </button>
-                {/* Botão de voltar */}
+                {}
                 <div className="text-center mb-4">
                   <span
-                    onClick={() => setStep(1)} // Volta ao step 1
+                    onClick={() => setStep(1)} 
                     className="text-blue-500 text-sm cursor-pointer hover:underline"
                   >
                     Voltar
                   </span>
                 </div>
+                {mensagem && (
+  <div
+    className={`${
+      mensagemTipo === "sucesso" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+    } border border-solid p-2 rounded mb-4`}
+  >
+    {mensagem}
+  </div>
+)}
               </form>
             )}
           </div>

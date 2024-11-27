@@ -1,3 +1,4 @@
+// Página de chamada das rotas com o backend
 
 import axios from 'axios';
 
@@ -18,16 +19,31 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// interface com os campos do Usuário
 interface UsuarioData {
   nome: string;
   email: string;
   senha: string;
-  telefone?: string;
-  endereco?: string;
-  dataNascimento?: string;
-  cpf?: string;
+  CPF: string;
+  dataNascimento: string;
+  endereco: string;
+  telefone: string;
+  salario: string;
+  
+}
+// interface com os campos do Cliente
+interface ClienteData {
+  nomeCliente: string;
+  emailCliente: string;
+  senhaCliente: string;
+  CPFCliente: string;
+  dataNascimentoCliente: string;
+  enderecoCliente: string;
+  telefoneCliente: string;
+  
 }
 
+// Rota de Login
 const login = async ({ email, senha }: { email: string; senha: string }) => {
   try {
     const response = await api.post('/auth/login', {
@@ -41,6 +57,7 @@ const login = async ({ email, senha }: { email: string; senha: string }) => {
   }
 };
 
+// Rotas Usuário
 const createUsuario = async (usuarioData: UsuarioData) => {
   try {
     const response = await api.post('/usuario', usuarioData);
@@ -63,8 +80,16 @@ const getUsuarios = async () => {
   }
 };
 
-
-const updateUsuario = async (id: number, usuarioData: { nome: string; email: string; senha: string }) => {
+const updateUsuario = async (id: number, usuarioData: {
+  nome: string;
+  email: string;
+  senha: string;
+  CPF: string;
+  dataNascimento: string;
+  endereco: string;
+  telefone: string;
+  salario: number;
+}) => {
   try {
     const response = await api.put(`/usuario/${id}`, usuarioData);
     return response.data;
@@ -94,7 +119,7 @@ export const resetPassword = async ({ email, senha }: { email: string; senha: st
   }
 };
 
-// Função para listar os serviços
+// Rotas Serviços
 const getServicos = async () => {
   try {
     const response = await api.get('/servicos');
@@ -105,7 +130,6 @@ const getServicos = async () => {
   }
 };
 
-// Função para criar um serviço
 const createServico = async (servicoData: {
   nomeServico: string;
   descricaoServico: string;
@@ -122,13 +146,75 @@ const createServico = async (servicoData: {
   }
 };
 
-// Função para excluir um serviço
 const deleteServico = async (id: number) => {
   try {
     const response = await api.delete(`/servicos/${id}`);
     return response.data;
   } catch (error) {
     console.error('Erro ao excluir serviço', error);
+    throw error;
+  }
+};
+
+// Rotas Cliente
+const createCliente = async (clienteData: ClienteData) => {
+  try {
+    const response = await api.post('/clientes', clienteData);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar cliente', error);
+    throw error;
+  }
+};
+
+const updateCliente = async (id: number, clienteData: {
+  nome: string;
+  email: string;
+  senha: string;
+  CPF: string;
+  dataNascimento: string;
+  endereco: string;
+  telefone: string;
+}) => {
+  try {
+    const response = await api.put(`/clientes/${id}`, clienteData);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar cliente', error);
+    throw error;
+  }
+};
+
+// Rotas de Agendamento
+const getAgendamentos = async () => {
+  try {
+    const response = await api.get('/agendamento');
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao carregar agendamentos", error);
+    throw error;
+  }
+};
+
+const createAgendamento = async (agendamentoData: {
+  usuarioId: number;
+  dataAgendamento: string;
+  solicitacoes: { servicoId: number; quantidade: number }[];
+}) => {
+  try {
+    const response = await api.post('/agendamento', agendamentoData);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar agendamento', error);
+    throw error;
+  }
+};
+const deleteAgendamento = async (id: number) => {
+  try {
+    const response = await api.delete(`/agendamento/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao excluir agendamento', error);
     throw error;
   }
 };
@@ -141,5 +227,11 @@ export {
   deleteUsuario,
   getServicos, 
   createServico, 
-  deleteServico
+  deleteServico,
+  createCliente,
+  updateCliente,
+  getAgendamentos,
+  createAgendamento,
+  deleteAgendamento
+
 };
