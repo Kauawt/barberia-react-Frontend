@@ -148,7 +148,7 @@ const ServicosPage = () => {
               />
             </div>
 
-            {/* Status do Serviço */}
+            {}
             <label className="flex items-center mb-4">
               <input
                 type="checkbox"
@@ -159,7 +159,7 @@ const ServicosPage = () => {
               Ativo
             </label>
 
-            {/* Botão para adicionar o serviço */}
+            {}
             <button
               type="submit"
               className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -206,6 +206,9 @@ const ServicosPage = () => {
             </tbody>
           </table>
         </div>
+        <footer className="footer">
+        <p>© 2024 JP Cortes Barbearia. Todos os direitos reservados.</p>
+      </footer>
       </div>
     </div>
   );

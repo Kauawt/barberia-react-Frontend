@@ -50,25 +50,27 @@ const AgendamentoPage = () => {
     fetchAgendamentos();
   }, []);
   return (
-    
-    <div className="telafundo-custom items-center justify-center">
-      <header className="header">
-        <div className="container">
-          <nav>
-            <ul className="header-nav">
-              <li><a href="/home" className="nav-link">Home</a></li>
-              <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-              <li><a href="/servicos" className="nav-link">Serviços</a></li>
-              <li><a href="/cliente" className="nav-link">Cliente</a></li>
-              <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-              <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-      <h1 className="text-4xl font-bold text-white mb-6">Tabela de Agendamentos</h1>
-      <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md w-11/12 max-w-4xl overflow-auto">
-        <table className="w-full text-left border-collapse">
+    <div className="telafundo-custom min-h-screen flex flex-col">
+  <header className="header">
+    <div className="container">
+      <nav>
+        <ul className="header-nav flex justify-between items-center">
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/servicos" className="nav-link">Serviços</a></li>
+          <li><a href="/cliente" className="nav-link">Cliente</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  {}
+  <div className="flex flex-col items-center justify-center flex-grow">
+    <h1 className="text-4xl font-bold text-white mb-6">Tabela de Agendamentos</h1>
+    <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md w-11/12 max-w-4xl overflow-auto">
+      <table className="w-full text-left border-collapse">
           <thead>
             <tr>
               <th className="border-b-2 border-gray-300 py-2 px-4 text-lg font-bold">ID</th>
@@ -109,7 +111,7 @@ const AgendamentoPage = () => {
         </table>
       </div>
 
-      {/* Formulário para criar agendamento */}
+      {}
       <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md w-11/12 max-w-4xl mt-8">
         <h2 className="text-2xl font-bold text-black mb-4">Criar Novo Agendamento</h2>
         {mensagem && <p className="text-center text-red-600 mb-4">{mensagem}</p>}
@@ -154,8 +156,6 @@ const AgendamentoPage = () => {
               required
             />
           </div>
-
-        
           <button
             type="submit"
             className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -163,7 +163,12 @@ const AgendamentoPage = () => {
             Criar Agendamento
           </button>
         </form>
+        
       </div>
+    </div>
+    <footer className="footer">
+          <p>© 2024 JP Cortes Barbearia. Todos os direitos reservados.</p>
+        </footer>
     </div>
   );
 };

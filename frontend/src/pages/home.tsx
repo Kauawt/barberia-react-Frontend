@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from 'next/router';
 import Link from "next/link";
 
 const Home = () => {
+  const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [noticias, setNoticias] = useState<
     { titulo: string; descricao: string; link: string }[]
   >([]);
@@ -16,6 +19,16 @@ const Home = () => {
 
   // Simulação de carregamento de notícias
   useEffect(() => {
+    /*const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    if (!token || role !== 'admin') {
+      // Redirecionar para login ou página de erro
+      router.push('/ajuda');
+    } else {
+      setIsAuthorized(true);
+      router.push('/cliente');
+    };*/
+  
     const fetchNoticias = async () => {
       const noticiasSimuladas = [
         {
@@ -54,8 +67,8 @@ const Home = () => {
   };
 
   return (
-    <div className="telafundo-custom"> {/* Aplica a classe de fundo global */}
-      {/* Cabeçalho */}
+    <div className="telafundo-custom"> {}
+      {}
       <header className="header">
     <div className="container">
       <nav>
@@ -63,6 +76,7 @@ const Home = () => {
           <li><a href="/home" className="nav-link">Home</a></li>
           <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
           <li><a href="/servicos" className="nav-link">Serviços</a></li>
+          <li><a href="/perfil" className="nav-link">Perfil</a></li>
           <li><a href="/cliente" className="nav-link">Cliente</a></li>
           <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
           <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
@@ -71,12 +85,12 @@ const Home = () => {
     </div>
   </header>
 
-      {/* Conteúdo Principal */}
+      {}
       <main className="container mx-auto py-8 px-4">
         <h2 className="subtitle mb-4">Bem-vindo à JP Cortes Barbearia</h2>
         <p className="text mb-6">Confira as últimas novidades e dicas sobre cuidados com cabelo e barba.</p>
 
-        {/* Lista de Notícias */}
+        {}
         <section>
           <div className="flex justify-between items-center mb-4">
             <h3 className="subtitle">Últimas Notícias</h3>
@@ -86,7 +100,7 @@ const Home = () => {
             {noticias.length > 0 ? (
               noticias.map((noticia, index) => (
                 <div key={index} className="card relative">
-                  {/* Botão de remoção */}
+                  {}
                   <button
                     onClick={() =>
                       setNoticias((prevNoticias) =>
@@ -116,7 +130,7 @@ const Home = () => {
         </section>
       </main>
 
-      {/* Modal de Adicionar Notícia */}
+      {}
       {mostrarFormulario && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md">

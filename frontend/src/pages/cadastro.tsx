@@ -11,7 +11,7 @@ const CadastroPage = () => {
   const [emailCliente, setEmailCliente] = useState("");
   const [senhaCliente, setSenhaCliente] = useState("");
   const [confirmarSenhaCliente, setConfirmarSenhaCliente] = useState("");
-  const [chaveSegurancaCliente, setChaveSegurancaCliente] = useState("");
+  const [chaveSeguraCliente, setchaveSeguraCliente] = useState("");
   const [telefoneCliente, setTelefoneCliente] = useState("");
   const [enderecoCliente, setEnderecoCliente] = useState("");
   const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
@@ -20,6 +20,28 @@ const CadastroPage = () => {
   const [mensagem, setMensagem] = useState<string | null>(null);
   const [mensagemTipo, setMensagemTipo] = useState<"sucesso" | "erro" | null>(null);
   const router = useRouter();
+
+  // Função para converter a data de '11/11/2003' para '2003-11-11', conforme o banco
+  /*const formatarData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ''); 
+    if (value.length > 2) value = value.replace(/(\d{2})(\d)/, '$1/$2'); 
+    if (value.length > 5) value = value.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+    setDataNascimentoCliente(value);
+  };
+
+  const convertDataFormato = (data: string) => {
+    const partes = data.split('/'); 
+    return `${partes[2]}-${partes[1]}-${partes[0]}`;
+  };
+
+  // Função para formatar cpf XXX.XXX.XXX-XX em XXXXXXXXXXX (insert no banco de dados)
+  const CpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ''); 
+    if (value.length > 3) value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    if (value.length > 6) value = value.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    if (value.length > 9) value = value.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+    setCpfCliente(value);
+  };*/
 
   const exibirMensagem = (mensagem: string, tipo: "sucesso" | "erro") => {
     setMensagem(mensagem);
@@ -65,6 +87,7 @@ const CadastroPage = () => {
         dataNascimentoCliente,
         enderecoCliente,
         telefoneCliente,
+        chaveSeguraCliente,
       });
       exibirMensagem("Cliente criado com sucesso!", "sucesso");
       router.push('/login')
@@ -194,6 +217,8 @@ const CadastroPage = () => {
                     className="w-full p-2 border border-gray-300 rounded"
                     value={dataNascimentoCliente}
                     onChange={(e) => setDataNascimentoCliente(e.target.value)}
+                    //onChange={formatarData}
+                    maxLength={10}
                     required
                   />
                 </div>
@@ -204,10 +229,11 @@ const CadastroPage = () => {
                   <input
                     id="cpf"
                     value={CPFCliente}
+                    //onChange={CpfChange}
                     onChange={(e) => setCpfCliente(e.target.value)}
                     className="w-full p-3 border rounded-md focus:outline-none"
                     required
-                    maxLength={11}
+                    maxLength={14}
                   />
                 </div>
                 <div className="mb-4">
@@ -218,8 +244,8 @@ const CadastroPage = () => {
                     type="text"
                     id="chaveSeguranca"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={chaveSegurancaCliente}
-                    onChange={(e) => setChaveSegurancaCliente(e.target.value)}
+                    value={chaveSeguraCliente}
+                    onChange={(e) => setchaveSeguraCliente(e.target.value)}
                     required
                   />
                   </div>
@@ -234,20 +260,20 @@ const CadastroPage = () => {
                 <div className="text-center mb-4">
                   <span
                     onClick={() => setStep(1)} 
-                    className="text-blue-500 text-sm cursor-pointer hover:underline"
+                    className="text-blue-500 text-lg cursor-pointer hover:underline"
                   >
                     Voltar
                   </span>
                 </div>
                 {mensagem && (
-  <div
-    className={`${
-      mensagemTipo === "sucesso" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-    } border border-solid p-2 rounded mb-4`}
-  >
-    {mensagem}
-  </div>
-)}
+            <div
+              className={`${
+                mensagemTipo === "sucesso" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+              } border border-solid p-2 rounded mb-4`}
+            >
+              {mensagem}
+            </div>
+          )}
               </form>
             )}
           </div>

@@ -40,6 +40,7 @@ interface ClienteData {
   dataNascimentoCliente: string;
   enderecoCliente: string;
   telefoneCliente: string;
+  chaveSeguraCliente: string;
   
 }
 
@@ -50,12 +51,36 @@ const login = async ({ email, senha }: { email: string; senha: string }) => {
       email: email,
       senha: senha,
     });
+    const {acess_token, role} = response.data;
     return response;
   } catch (error) {
     console.error("Erro na API de login:", error);
     throw error;
   }
 };
+
+/* testando token e role
+const login = async ({ email, senha }: { email: string; senha: string }) => {
+  try {
+    const response = await api.post('/auth/login', { email, senha });
+    const { acess_token, role } = response.data;
+
+    // Verifique os valores retornados
+    console.log('Token:', acess_token);
+    console.log('Role:', role);
+
+    // Armazene apenas se ambos existirem
+    if (acess_token && role) {
+      localStorage.setItem('token', acess_token);
+      localStorage.setItem('role', role);
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Erro na API de login:", error);
+    throw error;
+  }
+}; */
 
 // Rotas Usuário
 const createUsuario = async (usuarioData: UsuarioData) => {
@@ -80,16 +105,7 @@ const getUsuarios = async () => {
   }
 };
 
-const updateUsuario = async (id: number, usuarioData: {
-  nome: string;
-  email: string;
-  senha: string;
-  CPF: string;
-  dataNascimento: string;
-  endereco: string;
-  telefone: string;
-  salario: number;
-}) => {
+const updateUsuario = async (id: number, usuarioData: UsuarioData) => {
   try {
     const response = await api.put(`/usuario/${id}`, usuarioData);
     return response.data;
@@ -167,20 +183,23 @@ const createCliente = async (clienteData: ClienteData) => {
   }
 };
 
-const updateCliente = async (id: number, clienteData: {
-  nome: string;
-  email: string;
-  senha: string;
-  CPF: string;
-  dataNascimento: string;
-  endereco: string;
-  telefone: string;
-}) => {
+const updateCliente = async (id: number, clienteData: ClienteData) => {
   try {
     const response = await api.put(`/clientes/${id}`, clienteData);
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar cliente', error);
+    throw error;
+  }
+};
+
+// Buscar os dados do cliente
+const getClienteById = async (id: number) => {
+  try {
+    const response = await api.get(`/clientes/${id}`); 
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar cliente:', error);
     throw error;
   }
 };
@@ -232,6 +251,7 @@ export {
   updateCliente,
   getAgendamentos,
   createAgendamento,
-  deleteAgendamento
+  deleteAgendamento,
+  getClienteById
 
 };

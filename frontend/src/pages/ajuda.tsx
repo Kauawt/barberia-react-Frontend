@@ -1,4 +1,3 @@
-// src/app/ajuda/page.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -68,7 +67,7 @@ const FAQPage = () => {
             {faqs.map((faq, index) => (
               <div key={index} className="bg-white p-4 rounded-md shadow-md">
                 <div
-                  className="text-xl font-semibold text-blue-500 cursor-pointer"
+                  className="text-xl font-semibold text-black-500 cursor-pointer"
                   onClick={() => toggleAnswer(index)}
                 >
                   {faq.question}

@@ -7,7 +7,7 @@ const SobreNos = () => {
   return (
     <div className="telafundo-custom min-h-screen">
        
-        {/* Cabeçalho */}
+        {}
         <header className="header">
     <div className="container">
       <nav>
@@ -23,11 +23,11 @@ const SobreNos = () => {
     </div>
   </header>
 
-      {/* Conteúdo Principal */}
+      {}
       <main className="container mx-auto px-4 py-8">
         <h2 className="subtitle text-center">Conheça a Barbearia</h2>
 
-        {/* Nossa História */}
+        {}
         <section>
           <h3>Nossa História</h3>
           <p>

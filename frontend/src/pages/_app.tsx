@@ -6,7 +6,7 @@ import "../styles/globals.css";
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
-      {/* Layout Global ou Barra de Navegação, etc. */}
+      {}
       <Component {...pageProps} />
     </>
   );

@@ -2,20 +2,30 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login } from "../services/APIService"; // Importe a função de login do serviço
+import { login } from "../services/APIService";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState<string | null>(null);
-  const [redefinirSenha, setRedefinirSenha] = useState(false); // Controle de redefinição
+  const [redefinirSenha, setRedefinirSenha] = useState(false);
   const router = useRouter();
+  const [mensagem, setMensagem] = useState<string | null>(null);
+  const [mensagemTipo, setMensagemTipo] = useState<"sucesso" | "erro" | null>(null);
 
+  const exibirMensagem = (mensagem: string, tipo: "sucesso" | "erro") => {
+    setMensagem(mensagem);
+    setMensagemTipo(tipo);
+    setTimeout(() => {
+      setMensagem(null);
+      setMensagemTipo(null);
+    }, 4500);
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
     try {
-      console.log('Enviando dados para login:', { email, senha });  // Verifique os dados
+      console.log('Enviando dados para login:', { email, senha });
       const response = await login({ email, senha });
   
       if (response.data.access_token) {
@@ -32,6 +42,16 @@ const LoginPage = () => {
 
   const handleCadastrar = () => {
     router.push("/cadastro");
+    const isSenhaForte = (senha: string) => {
+      const regex =
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+      return regex.test(senha);
+    };
+
+    if (!isSenhaForte(senha)) {
+      exibirMensagem("A senha deve conter pelo menos 8 caracteres, incluindo 1 número, 1 letra minúscula e 1 símbolo.", "erro");
+      return;
+    }
   };
 
   return (
@@ -44,14 +64,14 @@ const LoginPage = () => {
 
       {}
       <div className="flex justify-center items-center min-h-screen z-10 relative">
-        <div className="w-full max-w-sm p-12 bg-white bg-opacity-80 border border-gray-300 rounded-md shadow-lg backdrop-blur-sm">
-          <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
-          <p className="mb-4 text-sm text-gray-700">
+      <div className="w-full max-w-sm p-12 bg-white bg-opacity-80 border border-gray-300 rounded-md shadow-lg backdrop-blur-sm">
+        <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
+        <p className="mb-4 text-xs text-black-700">
             Já é nosso cliente? Faça login com seu e-mail e senha. <br /> Ainda não tem
             uma conta?{" "}
             <span
               onClick={handleCadastrar}
-              className="text-sm text-blue-500 cursor-pointer"
+              className="text-xs text-blue-600 cursor-pointer"
             >
               Cadastrar
             </span>
@@ -60,20 +80,20 @@ const LoginPage = () => {
           {erro && <div className="text-red-500 text-center mb-4">{erro}</div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm">
+              <label htmlFor="email" className="text-xs text-black">
                 Email
               </label>
               <input
                 type="email"
                 id="email"
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-black-300 rounded"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div className="mb-2">
-              <label htmlFor="senha" className="block text-sm">
+              <label htmlFor="senha" className="text-xs text-black">
                 Senha
               </label>
               <input
@@ -88,7 +108,7 @@ const LoginPage = () => {
             <div className="text-right mb-4">
               <span
                 onClick={() => setRedefinirSenha(true)}
-                className="text-xs text-blue-500 cursor-pointer"
+                className="text-xs text-blue-600 cursor-pointer"
               >
                 Esqueci minha senha
               </span>
