@@ -25,7 +25,6 @@ const LoginPage = () => {
     e.preventDefault();
   
     try {
-      console.log('Enviando dados para login:', { email, senha });
       const response = await login({ email: email, senha: senha });
   
       if (response.data.access_token) {

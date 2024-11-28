@@ -62,10 +62,6 @@ const login = async ({ email, senha }: { email: string; senha: string }) => {
     const response = await api.post("/auth/login", { email, senha });
     const { acess_token, role, id } = response.data;
 
-    // Verifique os valores retornados
-    console.log("Token:", acess_token);
-    console.log("Role:", role);
-
     // Armazene apenas se ambos existirem
     if (acess_token) {
       localStorage.setItem("token", acess_token);
