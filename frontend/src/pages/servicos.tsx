@@ -55,11 +55,12 @@ const ServicosPage = () => {
   };
 
   useEffect(() => {
-    fetchServicos();
+    fetchServicos().catch((err) => console.error('Erro ao buscar serviços:', err));
   }, []);
-
+  
   return (
-    <div className="relative min-h-screen bg-gray-50">
+    <div className="telafundo-custom">
+    
       <header className="header">
         <div className="container">
           <nav>
@@ -74,85 +75,81 @@ const ServicosPage = () => {
           </nav>
         </div>
       </header>
+    {}
+    <div className="relative z-10 flex flex-col items-center min-h-screen p-6">
+        {}
+        <h1 className="text-3xl font-bold text-center text-white p-4 w-full">
+          Gerenciamento de Serviços
+        </h1>
 
-      <div className="relative z-10 flex flex-col items-center min-h-screen p-6">
-        <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg">
-          <h1 className="text-3xl font-bold text-center text-black-800 mb-6">
-            Gerenciamento de Serviços
-          </h1>
-
+        {}
+        <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg mt-6">
           {mensagem && (
             <div className="mb-4 text-center text-red-600">{mensagem}</div>
           )}
 
           <form onSubmit={handleCreateServico} className="space-y-6">
-          <div className="mb-4">
-                  <label htmlFor="nome" className="block text-sm">
-                    Nome do Serviço
-                  </label>
-            <input
-              type="text"
-              placeholder="Nome do Serviço"
-              value={nomeServico}
-              onChange={(e) => setNomeServico(e.target.value)}
-              className="w-full p-3 border rounded-md focus:outline-none"
-              required
-            />
+            <div className="mb-4">
+              <label htmlFor="nome" className="block text-xs font-semibold text-gray-700">Nome do Serviço</label>
+              <input
+                type="text"
+                placeholder="Nome do Serviço"
+                value={nomeServico}
+                onChange={(e) => setNomeServico(e.target.value)}
+                className="w-full p-3 border rounded-md focus:outline-none"
+                required
+              />
             </div>
             <div className="mb-4">
-                  <label htmlFor="nome" className="block text-sm">
-                  Descrição
-                  </label>
-            <textarea
-              placeholder="Exemplo: Corte de Cabelo"
-              value={descricaoServico}
-              onChange={(e) => setDescricaoServico(e.target.value)}
-              className="w-full p-3 border rounded-md focus:outline-none"
-              required
-            />
+              <label htmlFor="descricao" className="block text-xs font-semibold text-gray-700">Descrição</label>
+              <textarea
+                placeholder="Exemplo: Corte de Cabelo"
+                value={descricaoServico}
+                onChange={(e) => setDescricaoServico(e.target.value)}
+                className="w-full p-3 border rounded-md focus:outline-none"
+                required
+              />
             </div>
             <div className="mb-4">
-                  <label htmlFor="nome" className="block text-sm">
-                  Preço (R$)
-                  </label>
-            <input
-              type="number"
-              placeholder="Preço (R$)"
-              value={precoServico}
-              onChange={(e) => {
-                const valor = e.target.value;
-                if (valor.length <= 5) { // Limita a quantidade de caracteres para 2
-                  setPrecoServico(Number(valor));
-                }
-              }}
-              className="w-full p-3 border rounded-md focus:outline-none"
-              required
-              maxLength={5}
-              min={0}  // Para garantir que o valor não seja negativo
-              step="1" // Permitindo casas decimais para o preço
-            />
+              <label htmlFor="preco" className="block text-xs font-semibold text-gray-700">Preço (R$)</label>
+              <input
+                type="number"
+                placeholder="Preço (R$)"
+                value={precoServico}
+                onChange={(e) => {
+                  const valor = e.target.value;
+                  if (valor.length <= 5) {
+                    setPrecoServico(Number(valor));
+                  }
+                }}
+                className="w-full p-3 border rounded-md focus:outline-none"
+                required
+                maxLength={5}
+                min={0}
+                step="1"
+              />
             </div>
             <div className="mb-4">
-                  <label htmlFor="nome" className="block text-sm">
-                  Duração (min)
-                  </label>
-            <input
-              type="number"
-              placeholder="Duração (min)"
-              value={duracaoServico}
-              onChange={(e) => {
-                const valor = e.target.value;
-                if (valor.length <= 2) { // Limita a quantidade de caracteres para 2
-                  setDuracaoServico(Number(valor));
-                }
-              }}
-              className="w-full p-3 border rounded-md focus:outline-none"
-              required
-              maxLength={2}
-              min={0} 
-            />
+              <label htmlFor="duracao" className="block text-xs font-semibold text-gray-700">Duração (min)</label>
+              <input
+                type="number"
+                placeholder="Duração (min)"
+                value={duracaoServico}
+                onChange={(e) => {
+                  const valor = e.target.value;
+                  if (valor.length <= 2) {
+                    setDuracaoServico(Number(valor));
+                  }
+                }}
+                className="w-full p-3 border rounded-md focus:outline-none"
+                required
+                maxLength={2}
+                min={0}
+              />
             </div>
-            <label className="flex items-center">
+
+            {/* Status do Serviço */}
+            <label className="flex items-center mb-4">
               <input
                 type="checkbox"
                 checked={statusServico}
@@ -161,6 +158,8 @@ const ServicosPage = () => {
               />
               Ativo
             </label>
+
+            {/* Botão para adicionar o serviço */}
             <button
               type="submit"
               className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -170,8 +169,9 @@ const ServicosPage = () => {
           </form>
         </div>
 
+        {}
         <div className="bg-white p-6 rounded-lg shadow-lg mt-6 w-full max-w-2xl">
-          <h2 className="text-xl font-semibold text-center text-blue-800 mb-6">Lista de Serviços</h2>
+          <h2 className="text-xl font-semibold text-center text-white-800 mb-6">Lista de Serviços</h2>
           <table className="w-full text-left table-auto">
             <thead>
               <tr className="border-b">
