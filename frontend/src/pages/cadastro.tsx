@@ -105,6 +105,11 @@ const CadastroPage = () => {
     <div className="telafundo-custom min-h-screen">
       {}
       <div className="relative z-10 flex flex-col items-center min-h-screen p-4 text-white">
+      <nav>
+      <ul className="header-nav">
+          <li><a href="/login" className="nav-link">Login</a></li>
+        </ul>
+      </nav>
         <main className="mt-10 flex flex-col items-center w-full">
           <h2 className="text-4xl font-semibold text-white">Cadastro</h2>
 
@@ -218,6 +223,7 @@ const CadastroPage = () => {
                     value={dataNascimentoCliente}
                     onChange={(e) => setDataNascimentoCliente(e.target.value)}
                     //onChange={formatarData}
+                    placeholder="YYYY-MM-DD"
                     maxLength={10}
                     required
                   />

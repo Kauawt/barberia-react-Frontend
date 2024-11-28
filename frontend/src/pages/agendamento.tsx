@@ -155,11 +155,7 @@ const AgendamentoPage: React.FC = () => {
                   Serviços
                 </a>
               </li>
-              <li>
-                <a href="/cliente" className="nav-link">
-                  Cliente
-                </a>
-              </li>
+              
               <li>
                 <a href="/ajuda" className="nav-link">
                   Ajuda
@@ -195,9 +191,7 @@ const AgendamentoPage: React.FC = () => {
                 <th className="border-b-2 border-gray-300 py-2 px-4 text-lg font-bold">
                   Total
                 </th>
-                <th className="border-b-2 border-gray-300 py-2 px-4 text-lg font-bold">
-                  Ações
-                </th>
+                
               </tr>
             </thead>
             <tbody>
@@ -217,12 +211,6 @@ const AgendamentoPage: React.FC = () => {
                       R$ {agendamento.total.toFixed(2)}
                     </td>
                     <td className="border-b border-gray-300 py-2 px-4">
-                      <button
-                        onClick={() => handleDeleteAgendamento(agendamento.id)}
-                        className="text-red-500 hover:underline"
-                      >
-                        Excluir
-                      </button>
                     </td>
                   </tr>
                 ))

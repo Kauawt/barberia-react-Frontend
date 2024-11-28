@@ -50,7 +50,6 @@ const FAQPage = () => {
           <li><a href="/home" className="nav-link">Home</a></li>
           <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
           <li><a href="/servicos" className="nav-link">Serviços</a></li>
-          <li><a href="/cliente" className="nav-link">Cliente</a></li>
           <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
           <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
         </ul>
