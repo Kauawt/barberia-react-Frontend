@@ -8,7 +8,7 @@ import { createCliente } from "../services/APIService";
 const CadastroPage = () => {
   const [step, setStep] = useState(1); 
   const [nomeCliente, setNomeCliente] = useState("");
-  const [emailCliente, setEmailCliente] = useState("");
+  const [email, setemail] = useState("");
   const [senhaCliente, setSenhaCliente] = useState("");
   const [confirmarSenhaCliente, setConfirmarSenhaCliente] = useState("");
   const [chaveSeguraCliente, setchaveSeguraCliente] = useState("");
@@ -81,7 +81,7 @@ const CadastroPage = () => {
     try {
       await createCliente({
         nomeCliente,
-        emailCliente,
+        email,
         senhaCliente,
         CPFCliente,
         dataNascimentoCliente,
@@ -134,8 +134,8 @@ const CadastroPage = () => {
                     type="email"
                     id="email"
                     className="w-full p-2 border border-gray-300 rounded"
-                    value={emailCliente}
-                    onChange={(e) => setEmailCliente(e.target.value)}
+                    value={email}
+                    onChange={(e) => setemail(e.target.value)}
                     placeholder="Digite seu email"
                     required
                   />

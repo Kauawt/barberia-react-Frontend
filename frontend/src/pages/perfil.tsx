@@ -4,7 +4,7 @@ import { getClienteById, updateCliente } from "../services/APIService";
 
 const PerfilPage = () => {
   const [nomeCliente, setNomeCliente] = useState<string>("");
-  const [emailCliente, setEmailCliente] = useState<string>("");
+  const [email, setemail] = useState<string>("");
   const [dataNascimentoCliente, setDataNascimentoCliente] = useState<string>("");
   const [enderecoCliente, setEnderecoCliente] = useState<string>("");
   const [telefoneCliente, setTelefoneCliente] = useState<string>("");
@@ -21,8 +21,10 @@ const PerfilPage = () => {
           const response = await getClienteById(clienteId); 
           setClienteId(response.id);
           setNomeCliente(response.nomeCliente);
-          setEmailCliente(response.emailCliente);
+          setemail(response.email);
           setDataNascimentoCliente(response.dataNascimentoCliente);
+          setEnderecoCliente(response.enderecoCliente);
+          setTelefoneCliente(response.telefoneCliente);
         } catch (error) {
           console.error("Erro ao carregar os dados do cliente", error);
           setErro("Erro ao carregar os dados do cliente.");
@@ -37,15 +39,27 @@ const PerfilPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (clienteId === null) {
       setMensagem("Erro: ID do cliente não encontrado.");
       setMensagemTipo("erro");
       return;
     }
-
+  
     try {
-      await updateCliente(clienteId, { nomeCliente, emailCliente, dataNascimentoCliente, senhaCliente: "", CPFCliente: "", enderecoCliente: "", telefoneCliente: "", chaveSeguraCliente: "" });
+      const clienteData = {
+        id: clienteId,
+        nomeCliente,
+        email,
+        dataNascimentoCliente,
+        senhaCliente: "",
+        CPFCliente: "",
+        enderecoCliente,
+        telefoneCliente,
+        chaveSeguraCliente: "",
+      };
+  
+      await updateCliente(clienteId, clienteData);
       setMensagem("Dados atualizados com sucesso!");
       setMensagemTipo("sucesso");
     } catch (error) {
@@ -96,12 +110,12 @@ const PerfilPage = () => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="emailCliente" className="block text-lg font-medium text-gray-700">Email</label>
+              <label htmlFor="email" className="block text-lg font-medium text-gray-700">Email</label>
               <input
                 type="email"
-                id="emailCliente"
-                value={emailCliente}
-                onChange={(e) => setEmailCliente(e.target.value)}
+                id="email"
+                value={email}
+                onChange={(e) => setemail(e.target.value)}
                 className="mt-2 p-2 w-full border border-gray-300 rounded-md"
                 required
               />

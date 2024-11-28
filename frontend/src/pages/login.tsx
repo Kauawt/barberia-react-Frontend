@@ -26,7 +26,7 @@ const LoginPage = () => {
   
     try {
       console.log('Enviando dados para login:', { email, senha });
-      const response = await login({ email, senha });
+      const response = await login({ email: email, senha: senha });
   
       if (response.data.access_token) {
         localStorage.setItem('token', response.data.access_token);
