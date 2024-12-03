@@ -1,23 +1,70 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 const SobreNos = () => {
-  return (
-    <div className="telafundo-custom min-h-screen">
-       
-        {}
-        <header className="header">
-    <div className="container">
-      <nav>
-      <ul className="header-nav">
+  const [role, setRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedRole = localStorage.getItem("role");
+  
+      if (storedRole) {
+        setRole(storedRole);
+      } else {
+        setRole(null);
+      }
+  
+      setIsLoading(false);
+    }
+  }, []);
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+  const MenuItems =  () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (!token || !role){
+      return router.push('/login');
+    }
+    if(role === "cliente"){
+      return(
+        <>
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/perfil" className="nav-link">Perfil</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </>
+      );
+    }
+    if(role === "admin"){
+      return(
+        <>
           <li><a href="/home" className="nav-link">Home</a></li>
           <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
           <li><a href="/servicos" className="nav-link">Serviços</a></li>
-          
+          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
           <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
           <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </>
+      );
+    }
+    return null;
+  }
+
+  return (
+    <div className="telafundo-custom"> {}
+      {}
+      <header className="header">
+    <div className="container">
+      <nav>
+        <ul className="header-nav">
+          {MenuItems()}
         </ul>
       </nav>
     </div>

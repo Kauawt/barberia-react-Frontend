@@ -10,32 +10,60 @@ const PerfilPage = () => {
   const [telefoneCliente, setTelefoneCliente] = useState<string>("");
   const [erro, setErro] = useState<string | null>(null);
   const [mensagem, setMensagem] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [mensagemTipo, setMensagemTipo] = useState<"sucesso" | "erro" | null>(null);
   const [clienteId, setClienteId] = useState<number | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchCliente = async () => {
-      if (clienteId !== null) {
-        try {
-          const response = await getClienteById(clienteId); 
-          setClienteId(response.id);
-          setNomeCliente(response.nomeCliente);
-          setemail(response.email);
-          setDataNascimentoCliente(response.dataNascimentoCliente);
-          setEnderecoCliente(response.enderecoCliente);
-          setTelefoneCliente(response.telefoneCliente);
-        } catch (error) {
-          console.error("Erro ao carregar os dados do cliente", error);
-          setErro("Erro ao carregar os dados do cliente.");
-        }
+    if (typeof window !== "undefined") {
+      const storedRole = localStorage.getItem("role");
+  
+      if (storedRole) {
+        setRole(storedRole);
       } else {
-        setErro("ID do cliente não encontrado.");
+        setRole(null);
+      }
+  
+      setIsLoading(false);
+    }
+  }, []);
+  
+ /*useEffect(() => {
+  const storedClienteId = localStorage.getItem("id");
+  if (storedClienteId) {
+    setClienteId(Number(storedClienteId)); 
+  }
+  setIsLoading(false);
+}, [router]);*/
+
+useEffect(() => {
+  if (clienteId !== null) {
+    const fetchCliente = async () => {
+      try {
+        const response = await getClienteById(clienteId);
+        setNomeCliente(response.nomeCliente);
+        setemail(response.email);
+        setDataNascimentoCliente(response.dataNascimentoCliente);
+        setEnderecoCliente(response.enderecoCliente);
+        setTelefoneCliente(response.telefoneCliente);
+      } catch (error) {
+        console.error("Erro ao carregar os dados do cliente", error);
+        setErro("Erro ao carregar os dados do cliente.");
       }
     };
-  
-    fetchCliente();
-  }, [clienteId]);
+    if (!isLoading) {
+      fetchCliente();
+    }
+  } else {
+    setErro("ID do cliente não encontrado.");
+  }
+}, [isLoading, clienteId]);
+
+if (isLoading) {
+  return <div>Carregando...</div>;
+}
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,22 +96,49 @@ const PerfilPage = () => {
     }
   };
 
+  const MenuItems =  () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (!token || !role){
+      return router.push('/login');
+    }
+    if(role === "cliente"){
+      return(
+        <>
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/perfil" className="nav-link">Perfil</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </>
+      );
+    }
+    if(role === "admin"){
+      return(
+        <>
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/servicos" className="nav-link">Serviços</a></li>
+          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </>
+      );
+    }
+    return null;
+  }
   return (
-    <div className="telafundo-custom min-h-screen flex flex-col">
+    <div className="telafundo-custom"> {}
+      {}
       <header className="header">
-        <div className="container">
-          <nav>
-            <ul className="header-nav flex justify-between items-center">
-              <li><a href="/home" className="nav-link">Home</a></li>
-              <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-              <li><a href="/servicos" className="nav-link">Serviços</a></li>
-              <li><a href="/cliente" className="nav-link">Cliente</a></li>
-              <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-              <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+    <div className="container">
+      <nav>
+        <ul className="header-nav">
+          {MenuItems()}
+        </ul>
+      </nav>
+    </div>
+  </header>
 
       <div className="flex flex-col items-center justify-center flex-grow">
         <h1 className="text-4xl font-bold text-white mb-6">Meu Perfil</h1>

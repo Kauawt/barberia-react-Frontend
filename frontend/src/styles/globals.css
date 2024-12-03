@@ -30,34 +30,34 @@ main p, main span, main li, main a {
 
 /* Personalização dos links de navegação */
 .nav-link {
-  font-size: 1rem; /* Tamanho da fonte */
-  text-transform: uppercase; /* Letras maiúsculas */
+  font-size: 1rem;
+  text-transform: uppercase;
   color: white;
-  text-decoration: none; /* Remove o sublinhado */
-  transition: color 0.3s ease, transform 0.3s ease; /* Transição suave */
+  text-decoration: none; 
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ffcc00; /* Cor ao passar o mouse */
-  transform: scale(1.1); /* Leve aumento ao passar o mouse */
+  color: #ffcc00; 
+  transform: scale(1.1);
 }
 
 .nav-link:focus,
 .nav-link:active {
-  color: #ff9900; /* Cor ao focar ou clicar no link */
-  outline: none; /* Remove o contorno padrão do navegador */
+  color: #ff9900;
+  outline: none; 
 }
 
 .header-nav {
-  display: flex; /* Usando flex para exibir os itens lado a lado */
-  justify-content: flex-end; /* Alinha os itens à direita */
-  list-style: none; /* Remove os marcadores */
+  display: flex;
+  justify-content: flex-end; 
+  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .header-nav li {
-  margin-left: 1rem; /* Espaço entre os itens */
+  margin-left: 1rem; 
 }
 
 
@@ -75,20 +75,18 @@ main p, main span, main li, main a {
 .header {
   color: #fff;
   padding: 1rem 0;
-  text-align: right;  /* Alinha o conteúdo do cabeçalho à direita */
+  text-align: right;
 }
 
 /* Estilo para o rodapé */
 .footer {
-  color: #fff !important; /* Sobrescreve o estilo global */
-  background-color: transparent; /* Remove qualquer fundo */
-  text-align: center; /* Centraliza o texto */
+  color: #fff !important;
+  background-color: transparent;
+  text-align: center;
   padding: 1rem 0;
-  width: 100%; /* Garante que ocupa toda a largura */
-  margin-top: auto; /* Mantém o rodapé no final da página */
+  width: 100%;
+  margin-top: auto;
 }
-
-
 
 
 /* Títulos e texto */
@@ -97,12 +95,6 @@ main p, main span, main li, main a {
   font-weight: 700;
   color: #fff;
 }
-
-/*.subtitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #fff;
-}*/
 
 .subtitle {
   font-size: 2.25rem; /* Título principal maior */
@@ -179,31 +171,29 @@ main p, main span, main li, main a {
 .button-cancel:hover {
   background-color: #cbd5e0;
 }
-/* Classe para o fundo com imagem */
+
 .telafundo-custom {
   background-image: url('/images/wallpaper6.png');
   background-size: cover;
   opacity: 0.9;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 100vh; /* Garante que o fundo ocupe toda a altura da tela */
+  min-height: 100vh; 
   display: flex;
   flex-direction: column;
-  /* Outras propriedades do fundo podem ser ajustadas conforme necessário */
 }
 
 main {
   flex: 1;
 }
 
-/* Estilo das seções */
 section {
   margin-bottom: 2rem;
   padding: 1rem 0;
 }
 
 section h3 {
-  font-size: 1.5rem; /* Subtítulo maior */
+  font-size: 1.5rem; 
   font-weight: 600;
   color: #fff;
   margin-bottom: 1rem;
@@ -212,7 +202,7 @@ section h3 {
 section p {
   font-size: 1rem;
   line-height: 1.6;
-  color: #f0f0f0; /* Texto levemente mais claro */
+  color: #f0f0f0;
 }
 
 /* Mapa */
@@ -223,3 +213,12 @@ iframe {
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.button-sair{
+  top: "100%";
+  width: 50%;
+  height: 25px;
+  right: -35;
+  color: white;
+}
+

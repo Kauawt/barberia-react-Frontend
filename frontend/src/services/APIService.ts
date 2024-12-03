@@ -41,44 +41,25 @@ interface ClienteData {
   chaveSeguraCliente: string;
 }
 
-// Rota de Login
-/*const login = async ({ email, senha }: { email: string; senha: string }) => {
-  try {
-    const response = await api.post('/auth/login', {
-      email: email,
-      senha: senha,
-    });
-    const {acess_token, role} = response.data;
-    return response;
-  } catch (error) {
-    console.error("Erro na API de login:", error);
-    throw error;
-  }
-};
-
-*/ // testando token e role
+// testando token e role
 const login = async ({ email, senha }: { email: string; senha: string }) => {
   try {
     const response = await api.post("/auth/login", { email, senha });
     const { acess_token, role, id } = response.data;
-
-    // Armazene apenas se ambos existirem
     if (acess_token) {
       localStorage.setItem("token", acess_token);
     }
-
     if (role) {
       localStorage.setItem("role", role);
     }
-
     if(id){
       localStorage.setItem("id", id);
-
     }
-
+    console.log('token');
+    console.log(id);
+    console.log(role);
     return response;
   } catch (error) {
-    console.error("Erro na API de login:", error);
     throw error;
   }
 };
@@ -97,7 +78,6 @@ const createUsuario = async (usuarioData: UsuarioData) => {
 const getUsuarios = async () => {
   try {
     const response = await api.get("/usuario");
-    console.log("Resposta da API:", response.data);
     return response.data;
   } catch (error) {
     console.error("Erro ao carregar usuários", error);
@@ -199,7 +179,6 @@ const updateCliente = async (id: number, clienteData: ClienteData) => {
   }
 };
 
-// Buscar os dados do cliente
 const getClienteById = async (id: number) => {
   try {
     const response = await api.get(`/clientes/${id}`);

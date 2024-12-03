@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from 'next/router';
-import Link from "next/link";
+//import Link from "next/link";
 
 const Home = () => {
   const router = useRouter();
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [noticias, setNoticias] = useState<
     { titulo: string; descricao: string; link: string }[]
   >([]);
@@ -17,18 +20,21 @@ const Home = () => {
     link: "",
   });
 
-  // Simulação de carregamento de notícias
+  // Carregamento de notícias
   useEffect(() => {
-    /*const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
-    if (!token || role !== 'admin') {
-      // Redirecionar para login ou página de erro
-      router.push('/ajuda');
-    } else {
-      setIsAuthorized(true);
-      router.push('/cliente');
-    };*/
-  
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      const storedRole = localStorage.getItem("role");
+
+      // Se não houver token ou role no localStorage, redireciona para login
+      if (!token || !storedRole) {
+        router.push("/login");
+        return;
+      }
+
+      setRole(storedRole);
+      setIsLoading(false); // Atualiza o estado de carregamento após pegar a role
+
     const fetchNoticias = async () => {
       const noticiasSimuladas = [
         {
@@ -56,7 +62,12 @@ const Home = () => {
     };
 
     fetchNoticias();
-  }, []);
+  }}, [router]);
+  
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+  
 
   const adicionarNoticia = () => {
     if (novaNoticia.titulo.trim() && novaNoticia.descricao.trim() && novaNoticia.link.trim()) {
@@ -66,6 +77,79 @@ const Home = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    router.push("/login");
+  };
+
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation(); 
+    setDropdownOpen(!isDropdownOpen);
+
+    // Limpa qualquer timeout anterior
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
+
+    // Fecha o dropdown automaticamente após 1,5 segundos se nenhuma interação ocorrer
+    if (!isDropdownOpen) {
+      closeTimeoutRef.current = setTimeout(() => {
+        setDropdownOpen(false);
+      }, 1500);
+    }
+  };
+
+  const MenuItems =  () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (!token || !role){
+      return router.push('/login');
+    }
+    if(role === "cliente"){
+      return(
+        <>
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/perfil" className="nav-link">Perfil</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li className="relative flex items-center">
+            <a href="/sobre" className="nav-link">Sobre Nós</a>
+            <span className="nav-link cursor-pointer px-0.5" onClick={toggleDropdown}
+            >▼</span>
+            {isDropdownOpen && (
+              <ul className="absolute text-orange-500 button-sair">
+                <li><span onClick={handleLogout}
+                    className="block text-orange-500 hover:text-red-700 cursor-pointer"
+                  >Sair</span></li></ul>)}</li>
+        </>
+      );
+    }
+
+    if (role === "admin") {
+      return (
+        <>
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/servicos" className="nav-link">Serviços</a></li>
+          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li className="relative flex items-center">
+            <a href="/sobre" className="nav-link">Sobre Nós</a>
+            <span className="nav-link cursor-pointer px-0.5" onClick={toggleDropdown}
+            >▼</span>
+            {isDropdownOpen && (
+              <ul className="absolute text-orange-500 button-sair">
+                <li><span onClick={handleLogout}
+                    className="block text-orange-500 hover:text-red-700 cursor-pointer"
+                  >Sair</span></li></ul>)}</li>
+        </>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="telafundo-custom"> {}
       {}
@@ -73,12 +157,7 @@ const Home = () => {
     <div className="container">
       <nav>
         <ul className="header-nav">
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/servicos" className="nav-link">Serviços</a></li>
-          <li><a href="/cadastro" className="nav-link">Cliente</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+          {MenuItems()}
         </ul>
       </nav>
     </div>

@@ -21,7 +21,7 @@ const LoginPage = () => {
       setMensagemTipo(null);
     }, 4500);
   };
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
   
     try {
@@ -41,16 +41,6 @@ const LoginPage = () => {
 
   const handleCadastrar = () => {
     router.push("/cadastro");
-    const isSenhaForte = (senha: string) => {
-      const regex =
-        /^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
-      return regex.test(senha);
-    };
-
-    if (!isSenhaForte(senha)) {
-      exibirMensagem("A senha deve conter pelo menos 8 caracteres, incluindo 1 número, 1 letra minúscula e 1 símbolo.", "erro");
-      return;
-    }
   };
 
   return (
@@ -77,7 +67,7 @@ const LoginPage = () => {
             .
           </p>
           {erro && <div className="text-red-500 text-center mb-4">{erro}</div>}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label htmlFor="email" className="text-xs text-black">
                 Email

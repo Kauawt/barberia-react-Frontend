@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from 'next/router';
 import {
   getServicos,
   getClientes,
@@ -30,6 +31,7 @@ interface Solicitacao {
 }
 
 const AgendamentoPage: React.FC = () => {
+  const router = useRouter();
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [servicos, setServicos] = useState<Servico[]>([]);
@@ -43,11 +45,26 @@ const AgendamentoPage: React.FC = () => {
   const [quantidade, setQuantidade] = useState<number>(1);
   const [mensagem, setMensagem] = useState<string>("");
   const [role, setRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [dataAgendamento, setDataAgendamento] = useState<string>("");
   const [horaAgendamento, setHoraAgendamento] = useState<string>("");
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedRole = localStorage.getItem("role");
+  
+      if (storedRole) {
+        setRole(storedRole);
+      } else {
+        setRole(null);
+      }
+  
+      setIsLoading(false);
+    }
+  }, []);
+
+    useEffect(() => {
     const fetchData = async () => {
       try {
         const servicosData = await getServicos();
@@ -74,9 +91,46 @@ const AgendamentoPage: React.FC = () => {
         console.error("Erro ao carregar dados:", error);
       }
     };
+    if (!isLoading) {
+      fetchData();
+    }
+  }, [isLoading, refreshTrigger]);
 
-    fetchData();
-  }, [refreshTrigger]);
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+  
+  const MenuItems =  () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (!token || !role){
+      return router.push('/login');
+    }
+    if(role === "cliente"){
+      return(
+        <>
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/perfil" className="nav-link">Perfil</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </>
+      );
+    }
+    if(role === "admin"){
+      return(
+        <>
+          <li><a href="/home" className="nav-link">Home</a></li>
+          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
+          <li><a href="/servicos" className="nav-link">Serviços</a></li>
+          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
+          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+        </>
+      );
+    }
+    return null;
+  }
 
   const adicionarSolicitacao = () => {
     if (servicoSelecionado && quantidade > 0) {
@@ -135,41 +189,17 @@ const AgendamentoPage: React.FC = () => {
   };
 
   return (
-    <div className="telafundo-custom min-h-screen flex flex-col">
+    <div className="telafundo-custom"> {}
+      {}
       <header className="header">
-        <div className="container">
-          <nav>
-            <ul className="header-nav flex justify-between items-center">
-              <li>
-                <a href="/home" className="nav-link">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="/agendamento" className="nav-link">
-                  Agendamento
-                </a>
-              </li>
-              <li>
-                <a href="/servicos" className="nav-link">
-                  Serviços
-                </a>
-              </li>
-              
-              <li>
-                <a href="/ajuda" className="nav-link">
-                  Ajuda
-                </a>
-              </li>
-              <li>
-                <a href="/sobre" className="nav-link">
-                  Sobre Nós
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+    <div className="container">
+      <nav>
+        <ul className="header-nav">
+          {MenuItems()}
+        </ul>
+      </nav>
+    </div>
+  </header>
 
       <div className="flex flex-col items-center justify-center flex-grow">
         <h1 className="text-4xl font-bold text-white mb-6">
