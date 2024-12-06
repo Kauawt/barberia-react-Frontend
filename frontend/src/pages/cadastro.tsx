@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createCliente } from "../services/APIService";
+import Link from "next/link";
 
 
 const CadastroPage = () => {
@@ -16,100 +17,104 @@ const CadastroPage = () => {
   const [enderecoCliente, setEnderecoCliente] = useState("");
   const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
   const [CPFCliente, setCpfCliente] = useState("");
-  const [erro, setErro] = useState("");
-  const [mensagem, setMensagem] = useState<string | null>(null);
-  const [mensagemTipo, setMensagemTipo] = useState<"sucesso" | "erro" | null>(null);
+  const [mensagem] = useState<string | null>(null);
+  const [mensagemTipo] = useState<"sucesso" | "erro" | null>(null);
   const router = useRouter();
 
+
+  const isDataValida = (data: string) => {
+    const [dia, mes, ano] = data.split("/").map(Number);
+    if (!dia || !mes || !ano || ano < 1920 || ano > 9999) return false;
+    const diasNoMes = [
+      31,
+      28 + (ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0) ? 1 : 0),
+      31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+    ];
+    return mes >= 1 && mes <= 12 && dia >= 1 && dia <= diasNoMes[mes - 1];
+  };
+
   // Função para converter a data de '11/11/2003' para '2003-11-11', conforme o banco
-  /*const formatarData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, ''); 
-    if (value.length > 2) value = value.replace(/(\d{2})(\d)/, '$1/$2'); 
-    if (value.length > 5) value = value.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+  const formatarData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); 
+    if (value.length > 2) value = value.replace(/(\d{2})(\d)/, "$1/$2"); 
+    if (value.length > 5) value = value.replace(/(\d{2})\/(\d{2})(\d)/, "$1/$2/$3"); 
     setDataNascimentoCliente(value);
   };
 
-  const convertDataFormato = (data: string) => {
-    const partes = data.split('/'); 
-    return `${partes[2]}-${partes[1]}-${partes[0]}`;
+  const converterData = (data: string): string => {
+    if (!isDataValida(data)) {
+      alert("Data inválida. Por favor, insira uma data válida no formato DD/MM/YYYY.");
+      return "";
+    }
+    const [dia, mes, ano] = data.split("/");
+    return `${ano}-${mes}-${dia}`;
   };
 
   // Função para formatar cpf XXX.XXX.XXX-XX em XXXXXXXXXXX (insert no banco de dados)
+
   const CpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ''); 
     if (value.length > 3) value = value.replace(/(\d{3})(\d)/, '$1.$2');
     if (value.length > 6) value = value.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
     if (value.length > 9) value = value.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
     setCpfCliente(value);
-  };*/
-
-  const exibirMensagem = (mensagem: string, tipo: "sucesso" | "erro") => {
-    setMensagem(mensagem);
-    setMensagemTipo(tipo);
-    setTimeout(() => {
-      setMensagem(null);
-      setMensagemTipo(null);
-    }, 4500);
   };
-
-  const isCpfValido = (CPFCliente: string) => {
-    return CPFCliente.length === 11 && /^\d+$/.test(CPFCliente);
-  };
-
+  
   const handleNextStep = () => {
+
     if (senhaCliente !== confirmarSenhaCliente) {
       alert("As senhas não coincidem. Tente novamente.");
       return;
     }
+    const isSenhaForte = ( senhaCliente: string) => {
+      const regex =
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+      return regex.test(senhaCliente);
+    };
+    if (!isSenhaForte(senhaCliente)) {
+      alert("A senha deve conter pelo menos 8 caracteres, incluindo 1 número, 1 letra minúscula e 1 símbolo.");
+      return;
+    }
+
     setStep(2);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validação de senha forte
-    const isSenhaForte = ( senhaCliente: string) => {
-      const regex =
-        /^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
-      return regex.test(senhaCliente);
-    };
-
-    if (!isSenhaForte(senhaCliente)) {
-      exibirMensagem("A senha deve conter pelo menos 8 caracteres, incluindo 1 número, 1 letra minúscula e 1 símbolo.", "erro");
-      return;
-    }
+    const dataFormatada = converterData(dataNascimentoCliente);
+  if (!dataFormatada) {
+    return;
+  }
     try {
       await createCliente({
         nomeCliente,
         email,
         senhaCliente,
         CPFCliente,
-        dataNascimentoCliente,
+        dataNascimentoCliente: dataFormatada,
         enderecoCliente,
         telefoneCliente,
         chaveSeguraCliente,
       });
-      exibirMensagem("Cliente criado com sucesso!", "sucesso");
+      alert("Cliente criado com sucesso!");
       router.push('/login')
-    } catch (error: any) {
-      if (error.response) {
-        // Imprimir logs de erro da API
-        exibirMensagem(`Erro: ${error.response.data.message}`, "erro");
-      } else {
-        exibirMensagem("Erro ao criar Cliente. Tente novamente mais tarde.", "erro");
-      }
-    }
-  };
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+    }}
 
   return (
-    <div className="telafundo-custom min-h-screen">
-      {}
-      <div className="relative z-10 flex flex-col items-center min-h-screen p-4 text-white">
-      <nav>
+    <div className="telafundo-custom"> {}
+    {}
+    <header className="header">
+  <div className="container">
+    <nav>
       <ul className="header-nav">
-          <li><a href="/login" className="nav-link">Login</a></li>
+      <li><Link href="/login"><a className="nav-link">Login</a></Link></li>
         </ul>
       </nav>
+      </div>
+      </header>
         <main className="mt-10 flex flex-col items-center w-full">
           <h2 className="text-4xl font-semibold text-white">Cadastro</h2>
 
@@ -221,9 +226,8 @@ const CadastroPage = () => {
                     id="dataNascimento"
                     className="w-full p-2 border border-gray-300 rounded"
                     value={dataNascimentoCliente}
-                    onChange={(e) => setDataNascimentoCliente(e.target.value)}
-                    //onChange={formatarData}
-                    placeholder="YYYY-MM-DD"
+                    onChange={formatarData}
+                    placeholder="DD/MM/YYYY"
                     maxLength={10}
                     required
                   />
@@ -235,8 +239,8 @@ const CadastroPage = () => {
                   <input
                     id="cpf"
                     value={CPFCliente}
-                    //onChange={CpfChange}
-                    onChange={(e) => setCpfCliente(e.target.value)}
+                    onChange={CpfChange}
+                    //onChange={(e) => setCpfCliente(e.target.value)}
                     className="w-full p-3 border rounded-md focus:outline-none"
                     required
                     maxLength={14}
@@ -255,7 +259,7 @@ const CadastroPage = () => {
                     required
                   />
                   </div>
-                {erro && <p className="text-red-500 text-sm">{erro}</p>} {}
+                {<p className="text-red-500 text-sm">{}</p>} {}
                 <button
                   type="submit"
                   className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-green-600 mb-4"
@@ -289,7 +293,6 @@ const CadastroPage = () => {
           <p>© 2024 JP Cortes Barbearia. Todos os direitos reservados.</p>
         </footer>
       </div>
-    </div>
   );
 };
 

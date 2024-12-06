@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from 'next/router';
-//import Link from "next/link";
+import Link from "next/link";
 
 const Home = () => {
   const router = useRouter();
-  const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -20,20 +19,17 @@ const Home = () => {
     link: "",
   });
 
-  // Carregamento de notícias
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
       const storedRole = localStorage.getItem("role");
 
-      // Se não houver token ou role no localStorage, redireciona para login
       if (!token || !storedRole) {
         router.push("/login");
         return;
       }
 
-      setRole(storedRole);
-      setIsLoading(false); // Atualiza o estado de carregamento após pegar a role
+      setIsLoading(false);
 
     const fetchNoticias = async () => {
       const noticiasSimuladas = [
@@ -73,7 +69,7 @@ const Home = () => {
     if (novaNoticia.titulo.trim() && novaNoticia.descricao.trim() && novaNoticia.link.trim()) {
       setNoticias((prevNoticias) => [...prevNoticias, novaNoticia]);
       setNovaNoticia({ titulo: "", descricao: "", link: "" });
-      setMostrarFormulario(false); // Fecha o formulário
+      setMostrarFormulario(false); 
     }
   };
 
@@ -87,12 +83,11 @@ const Home = () => {
     e.stopPropagation(); 
     setDropdownOpen(!isDropdownOpen);
 
-    // Limpa qualquer timeout anterior
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
     }
 
-    // Fecha o dropdown automaticamente após 1,5 segundos se nenhuma interação ocorrer
+    // Fecha o dropdown automaticamente após 1,5 segundos
     if (!isDropdownOpen) {
       closeTimeoutRef.current = setTimeout(() => {
         setDropdownOpen(false);
@@ -108,13 +103,19 @@ const Home = () => {
     }
     if(role === "cliente"){
       return(
-        <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/perfil" className="nav-link">Perfil</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
+        <><>
+        <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+        <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+        <li><Link href="/perfil"><a className="nav-link">Perfil</a></Link></li>
+        <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+        <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
+      </>
+      <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+        <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+        <li><Link href="/perfil"><a className="nav-link">Perfil</a></Link></li>
+        <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
           <li className="relative flex items-center">
-            <a href="/sobre" className="nav-link">Sobre Nós</a>
+          <Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link>
             <span className="nav-link cursor-pointer px-0.5" onClick={toggleDropdown}
             >▼</span>
             {isDropdownOpen && (
@@ -129,20 +130,22 @@ const Home = () => {
     if (role === "admin") {
       return (
         <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/servicos" className="nav-link">Serviços</a></li>
-          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li className="relative flex items-center">
-            <a href="/sobre" className="nav-link">Sobre Nós</a>
-            <span className="nav-link cursor-pointer px-0.5" onClick={toggleDropdown}
-            >▼</span>
-            {isDropdownOpen && (
-              <ul className="absolute text-orange-500 button-sair">
-                <li><span onClick={handleLogout}
-                    className="block text-orange-500 hover:text-red-700 cursor-pointer"
-                  >Sair</span></li></ul>)}</li>
+           <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+      <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+      <li><Link href="/servicos"><a className="nav-link">Serviços</a></Link></li>
+      <li><Link href="/cadastro"><a className="nav-link">Cadastro</a></Link></li>
+      <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+      <li className="relative flex items-center">
+        <Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link>
+        <span className="nav-link cursor-pointer px-0.5" onClick={toggleDropdown}>
+          ▼
+        </span>
+        {isDropdownOpen && (
+          <ul className="absolute text-orange-500 button-sair">
+            <li><span onClick={handleLogout} className="block text-orange-500 hover:text-red-700 cursor-pointer">Sair</span></li>
+          </ul>
+        )}
+      </li>
         </>
       );
     }

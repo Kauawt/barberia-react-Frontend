@@ -1,16 +1,30 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { getServicos, createServico, deleteServico } from "../services/APIService";
+import Link from "next/link";
+
+interface Servico {
+  id: number;
+  nomeServico: string;
+  descricaoServico: string;
+  precoServico: number;
+  duracaoServico: number;
+  statusServico: boolean;
+}
 
 const ServicosPage = () => {
-  const [servicos, setServicos] = useState<any[]>([]);
+  const router = useRouter();
+  const [servicos, setServicos] = useState<Servico[]>([]);
   const [nomeServico, setNomeServico] = useState("");
   const [descricaoServico, setDescricaoServico] = useState("");
   const [precoServico, setPrecoServico] = useState(0);
   const [duracaoServico, setDuracaoServico] = useState(0);
   const [statusServico, setStatusServico] = useState(true);
   const [mensagem, setMensagem] = useState("");
+  //const [role, setRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchServicos = async () => {
     try {
@@ -40,7 +54,7 @@ const ServicosPage = () => {
       setStatusServico(true);
       fetchServicos();
     } catch (error) {
-      setMensagem("Erro ao criar serviço. Verifique os campos e tente novamente.");
+      console.error("Erro ao carregar dados:", error);
     }
   };
 
@@ -50,31 +64,67 @@ const ServicosPage = () => {
       setMensagem("Serviço excluído com sucesso!");
       fetchServicos();
     } catch (error) {
-      setMensagem("Erro ao excluir serviço.");
+      console.error("Erro ao carregar dados:", error);
     }
   };
 
+  
   useEffect(() => {
-    fetchServicos().catch((err) => console.error('Erro ao buscar serviços:', err));
-  }, []);
+    if (typeof window !== "undefined") {
+      const storedRole = localStorage.getItem("role");
+      const token = localStorage.getItem("token");
+  
+      if (!token || !storedRole) {
+        router.push("/login");
+        return;
+      }
+
+      //setRole(storedRole);
+      setIsLoading(false);
+  
+    }
+  }, [router, isLoading]);
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+
+  const MenuItems =  () => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (!token || !role){
+      return router.push('/login');
+    }
+    if(role === "cliente"){
+      router.push("/login");
+    }
+    if(role === "admin"){
+      return(
+        <>
+           <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+          <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+          <li><Link href="/servicos"><a className="nav-link">Serviços</a></Link></li>
+          <li><Link href="/cadastro"><a className="nav-link">Cadastro</a></Link></li>
+          <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+          <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
+        </>
+      );
+    }
+    return null;
+  }
   
   return (
-    <div className="telafundo-custom">
-    
+    <div className="telafundo-custom"> {}
+      {}
       <header className="header">
-        <div className="container">
-          <nav>
-            <ul className="header-nav">
-              <li><a href="/home" className="nav-link">Home</a></li>
-              <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-              <li><a href="/servicos" className="nav-link">Serviços</a></li>
-              
-              <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-              <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+    <div className="container">
+      <nav>
+        <ul className="header-nav">
+          {MenuItems()}
+        </ul>
+      </nav>
+    </div>
+  </header>
     {}
     <div className="relative z-10 flex flex-col items-center min-h-screen p-6">
         {}

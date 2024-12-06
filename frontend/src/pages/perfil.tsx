@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getClienteById, updateCliente } from "../services/APIService";
+import Link from "next/link";
 
 const PerfilPage = () => {
   const [nomeCliente, setNomeCliente] = useState<string>("");
@@ -10,7 +11,7 @@ const PerfilPage = () => {
   const [telefoneCliente, setTelefoneCliente] = useState<string>("");
   const [erro, setErro] = useState<string | null>(null);
   const [mensagem, setMensagem] = useState<string | null>(null);
-  const [role, setRole] = useState<string | null>(null);
+  //const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [mensagemTipo, setMensagemTipo] = useState<"sucesso" | "erro" | null>(null);
   const [clienteId, setClienteId] = useState<number | null>(null);
@@ -19,25 +20,19 @@ const PerfilPage = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedRole = localStorage.getItem("role");
-  
-      if (storedRole) {
-        setRole(storedRole);
-      } else {
-        setRole(null);
+      const token = localStorage.getItem("token");
+      const storedClienteId = localStorage.getItem("id");
+      if (!token || !storedRole || !storedClienteId) {
+        router.push("/login");
+        return;
       }
-  
+
+      //setRole(storedRole);
+      setClienteId(Number(storedClienteId));
       setIsLoading(false);
     }
-  }, []);
+  }, [router, isLoading]);
   
- /*useEffect(() => {
-  const storedClienteId = localStorage.getItem("id");
-  if (storedClienteId) {
-    setClienteId(Number(storedClienteId)); 
-  }
-  setIsLoading(false);
-}, [router]);*/
-
 useEffect(() => {
   if (clienteId !== null) {
     const fetchCliente = async () => {
@@ -69,13 +64,11 @@ if (isLoading) {
     e.preventDefault();
   
     if (clienteId === null) {
-      setMensagem("Erro: ID do cliente não encontrado.");
-      setMensagemTipo("erro");
       return;
     }
   
     try {
-      const clienteData = {
+      const clienteAtualizado = {
         id: clienteId,
         nomeCliente,
         email,
@@ -87,41 +80,37 @@ if (isLoading) {
         chaveSeguraCliente: "",
       };
   
-      await updateCliente(clienteId, clienteData);
+      await updateCliente(clienteId, clienteAtualizado);
       setMensagem("Dados atualizados com sucesso!");
       setMensagemTipo("sucesso");
     } catch (error) {
-      setMensagem("Erro ao atualizar os dados. Tente novamente.");
-      setMensagemTipo("erro");
+      console.error("Erro ao carregar dados:", error);
     }
   };
 
   const MenuItems =  () => {
-    const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-    if (!token || !role){
-      return router.push('/login');
-    }
+
     if(role === "cliente"){
       return(
         <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/perfil" className="nav-link">Perfil</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+          <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+          <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+          <li><Link href="/perfil"><a className="nav-link">Perfil</a></Link></li>
+          <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+          <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
         </>
       );
     }
     if(role === "admin"){
       return(
         <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/servicos" className="nav-link">Serviços</a></li>
-          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+           <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+          <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+          <li><Link href="/servicos"><a className="nav-link">Serviços</a></Link></li>
+          <li><Link href="/cadastro"><a className="nav-link">Cadastro</a></Link></li>
+          <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+          <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
         </>
       );
     }

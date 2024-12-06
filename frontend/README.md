@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Barbearia JP Cortes - Frontend
 
-## Getting Started
+## Sobre o Projeto
 
-First, run the development server:
+Este projeto visa criar uma aplicação eficiente e responsiva para gestão e suporte aos usuários de um sistema de barbearia. A solução foi desenvolvida com foco em:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Tela Login com funcionalidade de redefinição de senha a partir de uma chave segura.
+- Telas liberadas de acordo com o perfil.
+- Agendamento independente do Barbeiro.
+- Autenticação segura: Implementada utilizando JWT para acesso seguro a rotas protegidas.
+- Interface responsiva: Desenvolvida com React e Next.js, com estilizações usando Tailwind CSS.
+
+## Tecnologias Utilizadas
+
+### Frontend:
+- **React e Next.js**
+- **TypeScript**
+- **Tailwind CSS**
+
+### Backend:
+- **Typescript e Next.js**
+- **Autenticação com JWT**
+
+### Ferramentas de Teste:
+- **Thunder Client** para validação de rotas.
+
+## Funcionalidades Principais
+
+### Login
+- Login seguro com validação de credenciais via backend.
+- Armazenamento de token JWT no localStorage para autenticação de sessão.
+
+### Redefinição de Senha
+- Os usuários podem redefinir suas senhas informando:
+  - Uma chave segura.
+  - Uma nova senha.
+  - Confirmação da nova senha.
+- O backend valida e processa a redefinição através da rota `/clientes/{id}/senha`.
+
+
+### Interface de Navegação
+- Botões intuitivos para “Esqueci minha senha” e “Cadastrar”.
+- Dropdown para opções adicionais com comportamento dinâmico e responsivo.
+
+### Integração de Rotas
+- Uso de rotas protegidas para assegurar acesso apenas a usuários autenticados.
+- Testes das rotas backend realizados previamente para garantir comunicação eficiente.
+
+## Estrutura de Arquivos
+
+```
+/
+|-- /components
+|   |-- LoginForm.tsx
+|   |-- RedefinirSenhaForm.tsx
+|
+|-- /pages
+|   |-- login.tsx
+|   |-- home.tsx
+|
+|-- /styles
+|   |-- globals.css
+|
+|-- /backend
+    |-- server.js
+    |-- routes
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Passos para Executar
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Certifique-se de que o backend está configurado corretamente.
+2. Execute o servidor localmente (porta padrão: localhost:5000).
+3. Teste as rotas com Thunder Client ou outra ferramenta de sua preferência.
 
-## Learn More
+### Frontend
 
-To learn more about Next.js, take a look at the following resources:
+1. Navegue para o diretório do projeto.
+2. Instale as dependências com:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor de desenvolvimento com:
+   ```bash
+   npm run dev
+   ```
+4. Acesse [http://localhost:3000](http://localhost:3000) para visualizar a aplicação ou [https://barberia-react-frontend.vercel.app/]
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Funcionalidades Futuras
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Expansão para suporte a módulos educacionais adicionais.
+- Gamificação para aumentar o engajamento dos usuários.
+- Análise de desempenho detalhada através de dashboards dinâmicos.
 
-## Deploy on Vercel
+## Contribuição
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contribuições são bem-vindas! Para contribuir:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Faça um fork deste repositório.
+2. Crie uma branch para sua funcionalidade: 
+   ```bash
+   git checkout -b minha-feature
+   ```
+3. Faça commit de suas alterações:
+   ```bash
+   git commit -m 'Minha nova função'
+   ```
+4. Faça push para a branch:
+   ```bash
+   git push origin minha-feature
+   ```
+5. Abra um Pull Request.
+
+## Autor
+
+Desenvolvido por Kauã Nogueira Watanabe Nome.
+
+Instituição: Faculdade de Tecnologia de Indaiatuba.
+

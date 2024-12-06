@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import Link from "next/link";
 import {
   getServicos,
   getClientes,
   createAgendamento,
   getAgendamentos,
-  deleteAgendamento,
   getUsuarios,
 } from "../services/APIService";
 
@@ -16,7 +16,7 @@ interface Servico {
 }
 
 interface Cliente {
-  id: number;
+  id?: number;
   nomeCliente: string;
 }
 
@@ -30,12 +30,19 @@ interface Solicitacao {
   quantidade: number;
 }
 
+interface Agendamento {
+  id: number;
+  usuario: { nome: string };
+  dataAgendamento: string;
+  total: number;
+}
+
 const AgendamentoPage: React.FC = () => {
   const router = useRouter();
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [servicos, setServicos] = useState<Servico[]>([]);
-  const [agendamentos, setAgendamentos] = useState<any[]>([]);
+  const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
   const [clienteId, setClienteId] = useState<number | null>(null);
   const [usuarioId, setUsuarioId] = useState<number | null>(null);
   const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([]);
@@ -53,18 +60,23 @@ const AgendamentoPage: React.FC = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedRole = localStorage.getItem("role");
-  
-      if (storedRole) {
-        setRole(storedRole);
-      } else {
-        setRole(null);
-      }
-  
-      setIsLoading(false);
-    }
-  }, []);
+      const token = localStorage.getItem("token");
 
-    useEffect(() => {
+      if (!token || !storedRole) {
+        router.push("/login");
+        return;
+      }
+
+      setRole(storedRole);
+      setIsLoading(false); // Atualiza isLoading após a verificação do localStorage
+    }
+  }, [router]);
+
+  // Segundo useEffect para carregar os dados
+  useEffect(() => {
+    // Não faça nada enquanto estiver carregando
+    if (isLoading) return;
+
     const fetchData = async () => {
       try {
         const servicosData = await getServicos();
@@ -91,15 +103,14 @@ const AgendamentoPage: React.FC = () => {
         console.error("Erro ao carregar dados:", error);
       }
     };
-    if (!isLoading) {
-      fetchData();
-    }
-  }, [isLoading, refreshTrigger]);
+
+    fetchData();
+  }, [isLoading, refreshTrigger]); // Dependendo de isLoading ou refreshTrigger
 
   if (isLoading) {
     return <div>Carregando...</div>;
   }
-  
+
   const MenuItems =  () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
@@ -109,23 +120,23 @@ const AgendamentoPage: React.FC = () => {
     if(role === "cliente"){
       return(
         <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/perfil" className="nav-link">Perfil</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+          <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+          <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+          <li><Link href="/perfil"><a className="nav-link">Perfil</a></Link></li>
+          <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+          <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
         </>
       );
     }
     if(role === "admin"){
       return(
         <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/servicos" className="nav-link">Serviços</a></li>
-          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+           <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+          <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+          <li><Link href="/servicos"><a className="nav-link">Serviços</a></Link></li>
+          <li><Link href="/cadastro"><a className="nav-link">Cadastro</a></Link></li>
+          <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+          <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
         </>
       );
     }
@@ -174,19 +185,11 @@ const AgendamentoPage: React.FC = () => {
       setSolicitacoes([]);
       setRefreshTrigger((prev) => prev + 1);
     } catch (error) {
-      setMensagem("Erro ao criar agendamento. Tente novamente.");
+      console.error("Erro ao carregar dados:", error);
     }
   };
 
-  const handleDeleteAgendamento = async (id: number) => {
-    try {
-      await deleteAgendamento(id);
-      setMensagem("Agendamento excluído com sucesso!");
-      setRefreshTrigger((prev) => prev + 1);
-    } catch (error) {
-      setMensagem("Erro ao excluir agendamento.");
-    }
-  };
+
 
   return (
     <div className="telafundo-custom"> {}

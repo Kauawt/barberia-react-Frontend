@@ -30,7 +30,7 @@ interface UsuarioData {
 }
 // interface com os campos do Cliente
 interface ClienteData {
-  id: number;
+  id?: number;
   nomeCliente: string;
   email: string;
   senhaCliente: string;
@@ -39,6 +39,14 @@ interface ClienteData {
   enderecoCliente: string;
   telefoneCliente: string;
   chaveSeguraCliente: string;
+}
+
+interface ClienteAtualizacao {
+  nomeCliente?: string;
+  email?: string;
+  dataNascimentoCliente?: string;
+  enderecoCliente?: string;
+  telefoneCliente?: string;
 }
 
 // testando token e role
@@ -55,9 +63,6 @@ const login = async ({ email, senha }: { email: string; senha: string }) => {
     if(id){
       localStorage.setItem("id", id);
     }
-    console.log('token');
-    console.log(id);
-    console.log(role);
     return response;
   } catch (error) {
     throw error;
@@ -105,18 +110,24 @@ const deleteUsuario = async (id: number) => {
   }
 };
 
-export const resetPassword = async ({
-  email,
-  senha,
-}: {
-  email: string;
-  senha: string;
-}) => {
+const redefinirSenha = async (chaveSeguraCliente: string, novaSenha: string) => {
   try {
-    const response = await api.post("/auth/reset-password", { email, senha });
+    const id = localStorage.getItem('id');
+    if (!id) {
+      throw new Error('ID do cliente não encontrado no localStorage.');
+    }
+    const response = await api.patch(`/clientes/${id}/senha`, {
+      chaveSeguraCliente,
+      senha: novaSenha,
+    });
+    
+    if (response.status !== 200) {
+      throw new Error('Falha na atualização da senha.');
+    }
+
     return response.data;
   } catch (error) {
-    console.error("Erro ao redefinir senha", error);
+    console.error('Erro ao redefinir senha:', error);
     throw error;
   }
 };
@@ -169,9 +180,9 @@ const createCliente = async (clienteData: ClienteData) => {
   }
 };
 
-const updateCliente = async (id: number, clienteData: ClienteData) => {
+const updateCliente = async (id: number, clienteAtualizado: ClienteAtualizacao) => {
   try {
-    const response = await api.put(`/clientes/${id}`, clienteData);
+    const response = await api.put(`/clientes/${id}`, clienteAtualizado);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar cliente", error);
@@ -198,6 +209,12 @@ const getClientes = async (): Promise<ClienteData[]> => {
     throw error;
   }
 };
+
+const getClienteByEmail = async (email: string) => {
+  const response = await api.get(`/clientes/email/${email}`);
+  return response.data.id;
+};
+
 // Rotas de Agendamento
 const getAgendamentos = async () => {
   try {
@@ -249,4 +266,6 @@ export {
   deleteAgendamento,
   getClienteById,
   getClientes,
+  redefinirSenha,
+  getClienteByEmail,
 };

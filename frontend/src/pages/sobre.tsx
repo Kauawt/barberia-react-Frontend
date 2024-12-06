@@ -2,25 +2,27 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const SobreNos = () => {
-  const [role, setRole] = useState<string | null>(null);
+  //const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedRole = localStorage.getItem("role");
+      const token = localStorage.getItem("token");
   
-      if (storedRole) {
-        setRole(storedRole);
-      } else {
-        setRole(null);
+      if (!token || !storedRole) {
+        router.push("/login");
+        return;
       }
-  
+
+      //setRole(storedRole);
       setIsLoading(false);
     }
-  }, []);
+  }, [router, isLoading]);
 
   if (isLoading) {
     return <div>Carregando...</div>;
@@ -34,23 +36,23 @@ const SobreNos = () => {
     if(role === "cliente"){
       return(
         <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/perfil" className="nav-link">Perfil</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+          <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+          <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+          <li><Link href="/perfil"><a className="nav-link">Perfil</a></Link></li>
+          <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+          <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
         </>
       );
     }
     if(role === "admin"){
       return(
         <>
-          <li><a href="/home" className="nav-link">Home</a></li>
-          <li><a href="/agendamento" className="nav-link">Agendamento</a></li>
-          <li><a href="/servicos" className="nav-link">Serviços</a></li>
-          <li><a href="/cadastro" className="nav-link">Cadastro</a></li>
-          <li><a href="/ajuda" className="nav-link">Ajuda</a></li>
-          <li><a href="/sobre" className="nav-link">Sobre Nós</a></li>
+           <li><Link href="/home"><a className="nav-link">Home</a></Link></li>
+          <li><Link href="/agendamento"><a className="nav-link">Agendamento</a></Link></li>
+          <li><Link href="/servicos"><a className="nav-link">Serviços</a></Link></li>
+          <li><Link href="/cadastro"><a className="nav-link">Cadastro</a></Link></li>
+          <li><Link href="/ajuda"><a className="nav-link">Ajuda</a></Link></li>
+          <li><Link href="/sobre"><a className="nav-link">Sobre Nós</a></Link></li>
         </>
       );
     }
